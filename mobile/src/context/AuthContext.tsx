@@ -2,6 +2,7 @@ import { createContext, ReactNode, useState, useEffect } from "react";
 import * as Google from "expo-auth-session/providers/google";
 import * as AuthSession from "expo-auth-session";
 import * as WebBrowser from "expo-web-browser";
+import { api } from "../services/api";
 
 WebBrowser.maybeCompleteAuthSession();
 interface UserProps {
@@ -25,9 +26,11 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<UserProps>({} as UserProps);
   const [isUserLoading, setIsUserLoading] = useState(false);
 
+  //console.log(AuthSession.makeRedirectUri({ useProxy: true }))
+
   const [request, response, promptAsync] = Google.useAuthRequest({
     clientId:
-      "731314024819-lckbder1s6di38d14281o501t0qajj04.apps.googleusercontent.com",
+      "731314024819-miqb4skmo19bpdqlk1fmgehk1pgn0d4a.apps.googleusercontent.com",
     redirectUri: AuthSession.makeRedirectUri({ useProxy: true }),
     scopes: ["profile", "email"],
   });
@@ -45,25 +48,39 @@ export function AuthContextProvider({ children }: AuthProviderProps) {
   }
 
   async function signInWithGoogle(access_token: string) {
-    console.log(access_token)
+    try {
+      setIsUserLoading(true);
+      const tokenResponse = await api.post("/users", { access_token });
+      api.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${tokenResponse.data.token}`;
+
+      const userInfoResponse = await api.get("/me");
+      setUser(userInfoResponse.data.user);
+
+    } catch (error) {
+      console.log(error);
+      throw error;
+    } finally {
+      setIsUserLoading(false);
+    }
   }
 
   useEffect(() => {
-    if(response?.type === 'success' && response.authentication?.accessToken){
-      signInWithGoogle(response.authentication.accessToken)
+    if (response?.type === "success" && response.authentication?.accessToken) {
+      signInWithGoogle(response.authentication.accessToken);
     }
-  }, [response])
+  }, [response]);
 
   return (
     <AuthContext.Provider
       value={{
         signIn,
         isUserLoading,
-        user
+        user,
       }}
     >
       {children}
     </AuthContext.Provider>
   );
 }
- 
