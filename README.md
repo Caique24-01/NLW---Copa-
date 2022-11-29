@@ -1,5 +1,4 @@
-<h1> NLW COPA </h1>
-## 💻 Projeto
+## 💻 Projeto NLW COPA 
 
 Aplicação para participar de bolões da Copa do Mundo 2022.
 
@@ -13,15 +12,29 @@ Aplicação para participar de bolões da Copa do Mundo 2022.
 - [Prisma](https://www.prisma.io/)
 - E muitas outras…
 
-## 🚀 Como executar
+ ## 🚀 Como executar o Backend:
 
-Em todos os projetos, ao acessar a pasta, é preciso baixar os pacotes com o gerenciador de sua preferencia.
+- Instale os pacotes com `npm install`.
+- Faça uma copia do arquivo `.env.example` para `.env` e altere caso necessário.
+- Execute `npx prisma migrate dev` para rodar as migrations. (Esse comando também já vai executar as seeds)
+- Execute `npm run dev` para iniciar o servidor.
 
-Acesse a documentação de cada projeto:
+## 🚀 Como executar Web:
 
-- [Backend](./server/README.md)
-- [Web](./web/README.md)
-- [Mobile](./mobile/README.md)
+**Para que esse projeto funcione corretamente, é preciso estar com o servidor rodando.**
+
+- Instale os pacotes com `npm install`.
+- Execute `npm run dev` para iniciar o cliente web.
+
+## 🚀 Como executar Mobile:
+
+**Para que esse projeto funcione corretamente, é preciso estar com o servidor rodando.**
+
+- Instale os pacotes com `npm install`.
+- Criar o app no google para poder ter acesso ao OAuth (<https://docs.expo.dev/guides/authentication/#google>)
+- Faça uma copia do arquivo `.env.example` para `.env` e preencha corretamente.
+- Alterar o endereço do arquivo `src/services/api.ts` colocando o IP da máquina.
+- Execute `npm run dev` para iniciar o servidor do Expo.
 
 ## 🔖 Layout
 
